@@ -24,3 +24,5 @@ morgan: to login
 passport: for authentication
 
 passport-google-oauth20: for google authentication
+
+While using dotenv configuration , do not put .env at the end otherwise it will show error.
