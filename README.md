@@ -26,3 +26,12 @@ passport: for authentication
 passport-google-oauth20: for google authentication
 
 While using dotenv configuration , do not put .env at the end otherwise it will show error.
+
+In order to run the app in development/production mode ,we have to write
+"scripts": {
+    "start": "cross-env NODE_ENV=production node app",
+    "dev":"cross-env NODE_ENV=development nodemon app"
+}
+And for this we have to install npm install --global cross-env
+
+And in the command prompt we have to use npm run start or else npm run dev
