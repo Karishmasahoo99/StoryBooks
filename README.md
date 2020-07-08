@@ -35,3 +35,9 @@ In order to run the app in development/production mode ,we have to write
 And for this we have to install npm install --global cross-env
 
 And in the command prompt we have to use npm run start or else npm run dev
+
+For google-oauth we have to first login to google cloud console and create Oauth Client Id
+for that you have to fill all the details:
+creating name, upload pics, google link , its service and policy
+
+
