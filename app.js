@@ -2,8 +2,12 @@ const path=require('path');
 const express=require("express");
 const dotenv= require('dotenv');
 const morgan=require('morgan');
+const passport=require('passport');
 const exphbs = require('express-handlebars');
 const connectdb=require('./config/db');
+
+//Passport config
+require('./config/passport')(passport);
 
 connectdb();
 
