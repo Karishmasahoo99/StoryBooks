@@ -22,7 +22,8 @@ const UserSchema= new mongoose.Schema({
     createdAt:{
        type:Date,
        default:Date.now
-    }
-})
+    },
+});
 
-module.exports=mongoose.model("Stories",UserSchema)
+const User=mongoose.model('User',UserSchema)
+module.exports=User
