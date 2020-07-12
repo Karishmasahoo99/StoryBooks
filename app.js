@@ -1,52 +1,58 @@
-const path=require('path');
-const express=require("express");
-const dotenv= require('dotenv');
-const mongoose=require('mongoose');
-const morgan=require('morgan');
-const passport=require('passport');
-const session=require('express-session');
-const exphbs = require('express-handlebars');
-const MongoStore=require('connect-mongo')(session);
-const connectdb=require('./config/db');
+const path=require('path')
+const express=require('express')
+const mongoose=require('mongoose')
+const dotenv=require('dotenv')
+const passport=require('passport')
+const session=require('express-session')
+const morgan=require('morgan')
+const MongoStore= require('connect-mongo')(session)
+const exphbs= require('express-handlebars')
+const connectDb= require('./config/db')
+
+//Load config
+dotenv.config({path:'./config/config.env'})
 
 //Passport config
-require('./config/passport')(passport);
+require('./config/passport')(passport)
 
-connectdb();
+connectDb()
 
-const app=express();
+const app=express()
+if(process.env.NODE_ENV==='development'){
+    app.use(morgan('dev'))
+}
 
 //Handlebars
-app.engine('.hbs', exphbs({defaultLayout:'main',extname: '.hbs'}));
-app.set('view engine', '.hbs');
+app.engine('.hbs',exphbs({defaultLayout:'main' ,extname:'.hbs'}))
+app.set('view engine','.hbs')
 
-//session middleware
+//Session
 app.use(session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false,
-    store:new MongoStore({ mongooseConnection: mongoose.connection})
-  }))
+    secret:'Secret',
+    resave:false,
+    saveUninitialized:false,
+    store:new MongoStore({mongooseConnection:mongoose.connection})
+}))
 
-//Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+//Passport MiddleWare
+app.use(passport.initialize())
+app.use(passport.session())
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
+passport.serializeUser((user,done)=>{
+    done(null,user.id)
+})
+passport.deserializeUser((id,done)=>{
+    User.findById(id,(err,user)=>{
+        done(err,user)
+    })
+})
 
 //Static folder
-app.use(express.static(path.join(__dirname+'/public')))
+app.use(express.static(path.join(__dirname,'public')))
 
 //Routes
-app.use('/',require('./routes/index'));
-app.use('/auth',require('./routes/auth'));
+app.use('/',require('./routes/index'))
+app.use('/auth',require('./routes/auth'))
 
-const PORT= process.env.PORT|| 5000;
-
-app.listen(PORT,console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+const PORT=process.env.PORT ||5000;
+app.listen(PORT,console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`))
