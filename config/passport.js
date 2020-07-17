@@ -17,11 +17,11 @@ module.exports=function(passport){
            image:profile.photos[0].value,
        }
        try{
-           let user=await User.findOne({"req.user.googleId":profile.id})
+           let user=await User.find({googleId:profile.id})
            if(user){
+               console.log(user)
                return done(null,user.id)
-           }
-           else{
+           }else{
                user=await User.create(newUser)
                return done(null,user)
            }
